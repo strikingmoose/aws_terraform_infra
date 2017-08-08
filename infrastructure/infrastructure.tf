@@ -106,7 +106,7 @@ resource "aws_default_security_group" "main_vpc_security_group" {
 
 resource "aws_spot_instance_request" "aws_deep_learning_custom_spot" {
     ami           = "ami-4b44745d"
-    spot_price    = "0.20"
+    spot_price    = "0.25"
     instance_type = "p2.xlarge"
     security_groups = ["${aws_default_security_group.main_vpc_security_group.id}"]
     subnet_id = "${aws_subnet.main_vpc_subnet.id}"
