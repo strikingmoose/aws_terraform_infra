@@ -113,6 +113,6 @@ resource "aws_spot_instance_request" "aws_deep_learning_custom_spot" {
     key_name = "${var.myKeyPair}"
 
     tags {
-        Name = "aws_deep_learning_custom_spot
+        Name = "aws_deep_learning_custom_spot"
     }
 }
