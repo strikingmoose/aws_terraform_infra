@@ -17,3 +17,8 @@ variable "myKeyPair" {
   type    = "string"
   default = "ec2-user"
 }
+
+variable "myPrimaryAvailabilityZone" {
+  type    = "string"
+  default = "us-east-1d"
+}

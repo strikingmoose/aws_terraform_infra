@@ -35,6 +35,7 @@ resource "aws_default_route_table" "main_vpc_default_route_table" {
 
 resource "aws_subnet" "main_vpc_subnet" {
     vpc_id = "${aws_vpc.main_vpc.id}"
+    availability_zone = "${var.myPrimaryAvailabilityZone}"
     cidr_block = "${var.myCidrBlock}"
     map_public_ip_on_launch = true
 
@@ -94,25 +95,82 @@ resource "aws_default_security_group" "main_vpc_security_group" {
     }
 }
 
-// Terraform Test Ami //////////////////////////////////////////////
+//// t2.medium Test AMI //////////////////////////////////////////////
 //resource "aws_instance" "test" {
-//    ami           = "ami-c58c1dd3"
-//    instance_type = "t2.medium"
+//    ami             = "ami-c58c1dd3"
+//    instance_type   = "t2.medium"
 //    security_groups = ["${aws_default_security_group.main_vpc_security_group.id}"]
-//    subnet_id = "${aws_subnet.main_vpc_subnet.id}"
+//    subnet_id       = "${aws_subnet.main_vpc_subnet.id}"
 //    associate_public_ip_address = true
-//    key_name = "${var.myKeyPair}"
+//    key_name        = "${var.myKeyPair}"
+//    ebs_block_device    = {
+//        device_name = "/dev/xvda"
+//        volume_size = 20
+//        volume_type = "gp2"
+//        delete_on_termination = true
+//    }
 //}
 
-resource "aws_spot_instance_request" "aws_deep_learning_custom_spot" {
-    ami           = "ami-4b44745d"
-    spot_price    = "0.25"
-    instance_type = "p2.xlarge"
+//// Amazon Compute Optimized Amazon Linux AMI /////////////////////////////////////////
+//resource "aws_spot_instance_request" "aws_compute_optimized_spot" {
+//    spot_price    = "0.15"
+//    ami             = "ami-c58c1dd3"
+//    instance_type   = "m4.large"
+//    security_groups = ["${aws_default_security_group.main_vpc_security_group.id}"]
+//    subnet_id       = "${aws_subnet.main_vpc_subnet.id}"
+//    associate_public_ip_address = true
+//    key_name        = "${var.myKeyPair}"
+//    ebs_block_device    = {
+//        device_name = "/dev/xvda"
+//        volume_size = 30
+//        volume_type = "gp2"
+//        delete_on_termination = true
+//    }
+//
+//    tags {
+//        Name = "aws_compute_optimized_spot"
+//    }
+//}
+
+// Pragmatic Machine Learning Linux AMI /////////////////////////////////////////
+resource "aws_spot_instance_request" "aws_compute_optimized_spot" {
+    spot_price      = "0.065"
+
+    // AMI Settings
+//    ami             = "ami-c58c1dd3" // Amazon Linux AMI
+//    ami             = "ami-de897ec8" // Pragmatic Deep Learning AMI - https://aws.amazon.com/marketplace/pp/B01MUHVO4J
+    ami             = "ami-4b44745d" // Amazon Deep Learning AMI
+
+    // Instance Type Settings
+//    instance_type   = "c4.4xlarge"  // 16 CPU, 30 GB RAM, 2 Gb bandwith (spot = 0.21)
+    instance_type   = "m4.xlarge"    // 2 CPU, 8 GB RAM, 2 Gb bandwith (spot = 0.025)
+
     security_groups = ["${aws_default_security_group.main_vpc_security_group.id}"]
-    subnet_id = "${aws_subnet.main_vpc_subnet.id}"
-    key_name = "${var.myKeyPair}"
+    subnet_id       = "${aws_subnet.main_vpc_subnet.id}"
+    associate_public_ip_address = true
+    key_name        = "${var.myKeyPair}"
+//    ebs_block_device    = {
+//        device_name = "/dev/xvda"
+//        volume_size = 30
+//        volume_type = "gp2"
+//        delete_on_termination = true
+//    }
 
     tags {
-        Name = "aws_deep_learning_custom_spot"
+        Name = "aws_compute_optimized_spot"
     }
 }
+
+// Amazon Deep Learning AMI /////////////////////////////////////////
+//resource "aws_spot_instance_request" "aws_deep_learning_custom_spot" {
+//    ami           = "ami-4b44745d"
+//    spot_price    = "0.25"
+//    instance_type = "p2.xlarge"
+//    security_groups = ["${aws_default_security_group.main_vpc_security_group.id}"]
+//    subnet_id = "${aws_subnet.main_vpc_subnet.id}"
+//    key_name = "${var.myKeyPair}"
+//
+//    tags {
+//        Name = "aws_deep_learning_custom_spot"
+//    }
+//}
