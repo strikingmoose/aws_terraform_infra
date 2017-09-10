@@ -134,7 +134,7 @@ resource "aws_default_security_group" "main_vpc_security_group" {
 
 // Pragmatic Machine Learning Linux AMI /////////////////////////////////////////
 resource "aws_spot_instance_request" "aws_compute_optimized_spot" {
-    spot_price      = "0.065"
+    spot_price      = "0.03"
 
     // AMI Settings
 //    ami             = "ami-c58c1dd3" // Amazon Linux AMI
@@ -143,7 +143,8 @@ resource "aws_spot_instance_request" "aws_compute_optimized_spot" {
 
     // Instance Type Settings
 //    instance_type   = "c4.4xlarge"  // 16 CPU, 30 GB RAM, 2 Gb bandwith (spot = 0.21)
-    instance_type   = "m4.xlarge"    // 2 CPU, 8 GB RAM, 2 Gb bandwith (spot = 0.025)
+    instance_type   = "m4.large"    // 2 CPU, 8 GB RAM, 450 Mb bandwith (spot = 0.025)
+//    instance_type   = "m4.xlarge"    // 4 CPU, 16 GB RAM, 750 Mb bandwith (spot = 0.025)
 
     security_groups = ["${aws_default_security_group.main_vpc_security_group.id}"]
     subnet_id       = "${aws_subnet.main_vpc_subnet.id}"
